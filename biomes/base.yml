@@ -1,0 +1,11 @@
+id: BASE
+abstract: true
+
+variables:
+  base: 64
+  mountainHeight: 128
+
+noise-equation: -y + base
+
+elevation:
+  equation: (imageNoiseMountains(x, z)+1)/2 * mountainHeight

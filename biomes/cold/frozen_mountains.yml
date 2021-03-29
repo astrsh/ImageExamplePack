@@ -1,0 +1,13 @@
+id: "FROZEN_MOUNTAINS"
+vanilla: ICE_SPIKES
+extends: BASE
+
+palette:
+  - "BLOCK:minecraft:snow_block": 255
+  - "BLOCK:minecraft:bedrock": 0
+
+slant:
+  threshold: 4
+  palette:
+    - "BLOCK:minecraft:blue_ice": 255
+    - "BLOCK:minecraft:bedrock": 0

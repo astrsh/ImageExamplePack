@@ -1,0 +1,13 @@
+id: ARID_MOUNTAINS
+vanilla: BADLANDS
+extends: BASE
+
+palette:
+  - "BLOCK:minecraft:terracotta": 255
+  - "BLOCK:minecraft:bedrock": 0
+
+slant:
+  threshold: 4
+  palette:
+    - "BLOCK:minecraft:coarse_dirt": 255
+    - "BLOCK:minecraft:bedrock": 0

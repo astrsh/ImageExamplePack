@@ -1,0 +1,13 @@
+id: "SNOWY_MOUNTAINS"
+vanilla: SNOWY_MOUNTAINS
+extends: BASE
+
+palette:
+  - "BLOCK:minecraft:snow_block": 255
+  - "BLOCK:minecraft:bedrock": 0
+
+slant:
+  threshold: 4
+  palette:
+    - "BLOCK:minecraft:basalt": 255
+    - "BLOCK:minecraft:bedrock": 0

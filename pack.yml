@@ -1,0 +1,95 @@
+id: IMAGEEXAMPLE
+author: Astrash
+version: "1.0.0"
+
+noise:
+
+  imageNoiseMountains:
+    # This is an image noise sampler:
+    type: Image
+    image: images/heightmaps/mountain_1.png
+    channel: GRAYSCALE
+    frequency: 1  #  Lower frequency   =  stretch the image to make larger
+                  #
+                  #  Higher frequency  =   squish the image to make smaller
+                  #
+                  # A frequency of 1 means 1 pixel = 1 block
+                  #
+                  # I would not suggest any frequency below 1 for image
+                  # noise samplers, as you will lose detail!
+
+biomes:
+
+  type: PIPELINE
+    # Here PIPELINE is used instead of IMAGE, such that
+    # we can randomize some aspects of biome arrangement
+    # instead of having EVERYTHING determined by an image.
+    #
+    # You could use the IMAGE provider if you want to define
+    # exactly how every biome is arranged, however with
+    # PIPELINE, we can do things like arrange just the land
+    # and water, and get the biome pipeline to randomize
+    # everything else.
+    #
+    # In this example, the mountain climates will be dictated
+    # by an image, while the variations of biomes within those
+    # climates will be randomized by some noise.
+
+  resolution: 1
+    # Having a resolution of 1 gives a 1:1 block to pixel ratio
+    # at the cost of some performance. For this example it's fine
+    # since the pipeline is fairly simple, but for more complicated
+    # pipeline setups, I would recommend setting the resolution
+    # higher (around 3-5), so that things stay performant.
+    #
+    # If you make the resolution higher, and still want to retain
+    # the 1:1 ratio, modify the frequency of your image noise samplers
+    # within the pipeline such that they equal the resolution.
+    #
+    #   For example, increasing the resolution to 4 will stretch things
+    #   by a factor of 4, so increasing the frequency of the image sampler
+    #   to 4 will squish it by a factor of 4, effectively retaining the
+    #   same ratio of blocks to pixels (just with lower quality biome sampling).
+
+  blend:
+    amplitude: 1
+
+    noise:
+      type: OpenSimplex2
+      frequency: 0.12
+
+  pipeline:
+
+    source:
+      type: NOISE
+      noise:
+        # Another image noise sampler, for dictating the climate
+        type: Image
+        image: images/climate_distribution.png
+        channel: GRAYSCALE
+        frequency: 1
+      biomes:
+        MOUNTAINS: 1
+        SNOWY_MOUNTAINS: 1
+
+    stages:
+      - mutate: # Temperate mountain variants
+          type: REPLACE
+          from: "BIOME:MOUNTAINS"
+          to:
+            - SELF: 4
+            - ARID_MOUNTAINS: 1
+          noise: &biomeVariant
+            # Noise that determines how variants
+            # within each climate are distributed
+            type: Cellular
+            return: CellValue
+            frequency: 0.08
+
+      - mutate: # Snowy mountain variants
+          type: REPLACE
+          from: "BIOME:SNOWY_MOUNTAINS"
+          to:
+            - SELF: 4
+            - FROZEN_MOUNTAINS: 1
+          noise: *biomeVariant
